@@ -2,3 +2,4 @@ jieba
 sklearn
 numpy
 scipy
+beautifulsoup4
