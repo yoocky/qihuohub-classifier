@@ -18,3 +18,5 @@ step3: TFIDF_space.py
 
 step4:NBayes_Predict.py
 
+或直接运行app.py
+默认注销掉了训练集的切词，当训练集语料库又增加时，请去掉注释对语料库进行重新切洗词
