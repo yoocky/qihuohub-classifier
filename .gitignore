@@ -1,2 +1,5 @@
 py3
 .vscode
+__pycache__
+*.bak
+*.pyc
