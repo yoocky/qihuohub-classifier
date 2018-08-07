@@ -2,8 +2,6 @@
 # -*- coding: UTF-8 -*-
 """
 @version: python3.6
-@author: XiangguoSun
-@contact: sunxiangguodut@qq.com
 @file: TFIDF_space.py
 @time: 2018/1/23 16:12
 @software: PyCharm
