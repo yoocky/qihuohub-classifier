@@ -24,9 +24,10 @@ clf = MultinomialNB(alpha=0.001).fit(train_set.tdm, train_set.label)
 
 # 预测分类结果
 predicted = clf.predict(test_set.tdm)
+
 for flabel, file_name, expct_cate in zip(test_set.label, test_set.filenames, predicted):
-    predicted_log = ":" + file_name + " -->预测类别:" + expct_cate
-    print(predicted_log)
+    if flabel != expct_cate or expct_cate == 'CO-Mess' :
+        print(file_name, ": 实际类别:", flabel, " -->预测类别:", expct_cate)
 
 print("预测完毕!!!")
 
@@ -38,4 +39,4 @@ def metrics_result(actual, predict):
     print('f1-score:{0:.3f}'.format(metrics.f1_score(actual, predict, average='weighted')))
 
 
-# metrics_result(test_set.label, predicted)
+metrics_result(test_set.label, predicted)
