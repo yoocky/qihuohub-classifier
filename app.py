@@ -35,15 +35,12 @@ def corpus2Bunch(filename):
     wordbag_path = "upload_word_bag/" + filename + "_set.dat"  # Bunch存储路径
     seg_path = "upload_corpus_seg/" + filename + ".txt" # 分词后分类语料库路径
     # 创建一个Bunch实例
-    bunch = Bunch(filenames=[], contents=[])
+    bunch = Bunch(filenames=[seg_path], contents=[readfile(seg_path)])
     '''
     extend(addlist)是python list中的函数，意思是用新的list（addlist）去扩充
     原来的list
     '''
-    bunch.filenames.append(seg_path)
-    print(readfile(seg_path))
-    bunch.contents.append(readfile(seg_path))  # 读取文件内容
-    '''append(element)是python list中的函数，意思是向原来的list中添加element，注意与extend()函数的区别'''
+
     # 将bunch存储到wordbag_path路径中
     with open(wordbag_path, "wb") as file_obj:
         pickle.dump(bunch, file_obj)
@@ -53,12 +50,14 @@ def vector_space(filename):
     stopword_path = "upload_word_bag/hlt_stop_words.txt"
     bunch_path = "upload_word_bag/" + filename + "_set.dat"
     space_path = "upload_word_bag/"+ filename +"space.dat"
+    train_tfidf_path = "train_word_bag/tfdifspace.dat"
     stpwrdlst = readfile(stopword_path).splitlines()
     bunch = readbunchobj(bunch_path)
     tfidfspace = Bunch(filenames=bunch.filenames, tdm=[], vocabulary={})
-    vectorizer = TfidfVectorizer(stop_words=stpwrdlst, sublinear_tf=True, max_df=0.5)
+    trainbunch = readbunchobj(train_tfidf_path)
+    tfidfspace.vocabulary = trainbunch.vocabulary
+    vectorizer = TfidfVectorizer(stop_words=stpwrdlst, sublinear_tf=True, max_df=0.5, vocabulary=trainbunch.vocabulary)
     tfidfspace.tdm = vectorizer.fit_transform(bunch.contents)
-    tfidfspace.vocabulary = vectorizer.vocabulary_
 
     writebunchobj(space_path, tfidfspace)
     print("if-idf词向量空间实例创建成功！！！")
@@ -80,7 +79,6 @@ def predicted(filename):
     clf = MultinomialNB(alpha=0.001).fit(train_set.tdm, train_set.label)
 
     # 预测分类结果
-    print(test_set.tdm)
     predicted = clf.predict(test_set.tdm)
     return predicted
 if __name__ == '__main__':
